@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { hayCamposVacios, correoValido, telefonoValido, esCorreoDuoc } from '../utils/validaciones'
 
 function Registro() {
@@ -16,25 +17,25 @@ function Registro() {
   }
 
   function manejarEnvio(evento) {
-  evento.preventDefault()
+    evento.preventDefault()
 
-  if (hayCamposVacios(datos)) {
-    setMensaje('Debe rellenar todas las casillas')
-    return
+    if (hayCamposVacios(datos)) {
+      setMensaje('Debe rellenar todas las casillas')
+      return
+    }
+
+    if (!correoValido(datos.email) || !telefonoValido(datos.telefono)) {
+      setMensaje('El correo o el teléfono no tienen el formato correcto')
+      return
+    }
+
+    if (esCorreoDuoc(datos.email)) {
+      setMensaje('Registro exitoso. ¡Felicidades! Tienes un descuento especial por ser parte de Duoc UC.')
+      return
+    }
+
+    setMensaje('Registro exitoso. ¡Bienvenido a Level-Up Gamer!')
   }
-
-  if (!correoValido(datos.email) || !telefonoValido(datos.telefono)) {
-    setMensaje('El correo o el teléfono no tienen el formato correcto')
-    return
-  }
-
-  if (esCorreoDuoc(datos.email)) {
-    setMensaje('Registro exitoso. ¡Felicidades! Tienes un descuento especial por ser parte de Duoc UC.')
-    return
-  }
-
-  setMensaje('Registro exitoso. ¡Bienvenido a Level-Up Gamer!')
-}
 
   return (
     <section className="login">
@@ -103,6 +104,9 @@ function Registro() {
 
           <button type="submit" className="btn-registrar">Registrarte</button>
           <p className="form-message">{mensaje}</p>
+          <Link to="/team" target="_blank" rel="noopener noreferrer" className="team-link">
+            Nuestro team
+          </Link>
         </form>
       </div>
     </section>

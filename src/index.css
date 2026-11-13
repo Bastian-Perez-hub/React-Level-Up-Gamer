@@ -626,3 +626,111 @@ nav ul li {
     font-size: 1.1rem;
     margin-bottom: 25px;
 }
+/* =======================================
+   ADMINISTRACIÓN DE PRODUCTOS
+   ======================================= */
+.admin-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #333333;
+}
+
+.admin-table th {
+    color: #39FF14;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.admin-table td {
+    color: #D3D3D3;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-danger {
+    background-color: #FF3131;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.admin-message {
+    text-align: center;
+    color: #39FF14;
+    margin-bottom: 20px;
+}
+.team-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #1E90FF;
+    font-size: 0.9rem;
+}
+
+.team-link:hover {
+    color: #39FF14;
+}
+/* Formulario de crear / modificar producto */
+.admin-form {
+    max-width: 1000px;
+    margin: 0 20px 30px;
+    padding: 25px;
+    border: 1px solid #1E90FF;
+}
+
+@media (min-width: 1040px) {
+    .admin-form {
+        margin: 0 auto 30px;
+    }
+}
+
+.admin-form h3 {
+    color: #39FF14;
+    margin-bottom: 20px;
+}
+
+.admin-form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #D3D3D3;
+    border: 1px solid #D3D3D3;
+    padding: 10px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #D3D3D3;
+    color: #000000;
+}
+
+/* El código no se puede cambiar al editar */
+.form-group input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
