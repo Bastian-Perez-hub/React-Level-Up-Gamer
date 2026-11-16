@@ -26,10 +26,16 @@ function AdminProductos() {
 
   // Carga inicial: se ejecuta una sola vez al abrir la página
   useEffect(() => {
-    obtenerProductos().then((datos) => {
-      setProductos(datos)
-      setCargando(false)
-    })
+    obtenerProductos()
+      .then((datos) => {
+        setProductos(datos)
+      })
+      .catch((error) => {
+        setMensaje(`No se pudieron cargar los productos: ${error.message}`)
+      })
+      .finally(() => {
+        setCargando(false)
+      })
   }, [])
 
   // Vuelve a pedir la lista al servicio (después de crear, editar o eliminar)

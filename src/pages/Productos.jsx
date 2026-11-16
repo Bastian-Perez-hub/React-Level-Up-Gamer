@@ -5,12 +5,19 @@ import { obtenerProductos } from '../services/productoServices'
 function Productos() {
   const [productos, setProductos] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    obtenerProductos().then((datos) => {
-      setProductos(datos)
-      setCargando(false)
-    })
+    obtenerProductos()
+      .then((datos) => {
+        setProductos(datos)
+      })
+      .catch((e) => {
+        setError(e.message)
+      })
+      .finally(() => {
+        setCargando(false)
+      })
   }, [])
 
   return (
@@ -18,6 +25,8 @@ function Productos() {
       <h2 className="section-title">Catálogo de Productos</h2>
       {cargando ? (
         <p className="section-title">Cargando productos...</p>
+      ) : error ? (
+        <p className="section-title">No se pudieron cargar los productos: {error}</p>
       ) : (
         <ul className="grid-container">
           {productos.map((producto) => (

@@ -14,13 +14,39 @@ function Carrito() {
   const [cargando, setCargando] = useState(true)
   const [comprando, setComprando] = useState(false)
   const [error, setError] = useState('')
+  const [errorCarga, setErrorCarga] = useState('')
   const [confirmacion, setConfirmacion] = useState(null)
 
   useEffect(() => {
-    obtenerProductos().then((datos) => {
-      setCatalogo(datos)
-      setCargando(false)
-    })
+    let activo = true
+    obtenerProductos()
+      .then((datos) => {
+        if (!activo) return
+        setCatalogo(datos)
+
+        // Sincroniza el carrito guardado con el estado real del backend
+        items.forEach((item) => {
+          const producto = datos.find((p) => p.codigo === item.codigo)
+          if (!producto || producto.stock <= 0) {
+            quitar(item.codigo)
+            return
+          }
+          if (item.cantidad > producto.stock) {
+            cambiarCantidad(item.codigo, producto.stock, producto.stock)
+          }
+        })
+      })
+      .catch((e) => {
+        if (activo) setErrorCarga(e.message)
+      })
+      .finally(() => {
+        if (activo) setCargando(false)
+      })
+
+    return () => {
+      activo = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // El carrito solo guarda { codigo, cantidad }.
@@ -46,11 +72,31 @@ function Carrito() {
 
     try {
       const compra = await crearCompra(items)
-      // Guardamos una "foto" de lo comprado antes de vaciar el carrito
-      setConfirmacion({ compra, lineas, total })
+      // Guardamos una "foto" de lo comprado usando la respuesta del backend
+      const lineasConfirmacion = (compra.items || []).map((detalle) => {
+        const producto = catalogo.find((p) => p.codigo === detalle.codigo)
+        return {
+          codigo: detalle.codigo,
+          nombre: producto?.nombre ?? detalle.codigo,
+          cantidad: detalle.cantidad,
+          subtotal: detalle.subtotal ?? (detalle.precioUnitario ?? 0) * detalle.cantidad,
+        }
+      })
+      setConfirmacion({
+        compra,
+        lineas: lineasConfirmacion.length ? lineasConfirmacion : lineas,
+        total: compra.total ?? total,
+      })
       vaciar()
     } catch (e) {
       setError(e.message)
+      // Refresca catálogo para reflejar stock/precios reales tras un fallo (ej. 409)
+      try {
+        const datos = await obtenerProductos()
+        setCatalogo(datos)
+      } catch {
+        // se mantiene el catálogo actual si falla la recarga
+      }
     } finally {
       setComprando(false)
     }
@@ -58,6 +104,10 @@ function Carrito() {
 
   if (cargando) {
     return <h2 className="section-title">Cargando carrito...</h2>
+  }
+
+  if (errorCarga) {
+    return <h2 className="section-title">No se pudo cargar el carrito: {errorCarga}</h2>
   }
 
   // Pantalla de confirmación después de comprar
