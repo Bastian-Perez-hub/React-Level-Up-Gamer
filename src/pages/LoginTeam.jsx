@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { iniciarSesionTeam } from '../utils/sesionTeam'   // <-- CAMBIO 1: import nuevo
 
 function LoginTeam() {
   const [datos, setDatos] = useState({
@@ -23,6 +24,7 @@ function LoginTeam() {
 
     // MOCK: cualquier credencial es válida.
     // Con backend, aquí se haría un POST /api/login y se revisaría el rol.
+    iniciarSesionTeam()                                    // <-- CAMBIO 2: guarda la sesión
     navigate('/admin/productos')
   }
 

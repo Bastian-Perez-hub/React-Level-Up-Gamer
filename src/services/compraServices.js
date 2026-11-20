@@ -11,4 +11,9 @@ export async function crearCompra(items) {
     method: 'POST',
     body: JSON.stringify({ items: detalles }),
   })
+  
+}
+// Lista todas las compras (más recientes primero). Solo para el panel admin.
+export async function obtenerCompras() {
+  return apiFetch('/api/compras')
 }

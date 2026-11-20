@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
+import AdminNav from '../components/AdminNav'          // <-- agrega esta línea
 import {
   obtenerProductos,
   crearProducto,
   actualizarProducto,
   eliminarProducto,
 } from '../services/productoServices'
-
 // Valores iniciales del formulario (todo texto, porque los inputs entregan texto)
 const FORMULARIO_VACIO = {
   codigo: '',
@@ -114,7 +114,7 @@ function AdminProductos() {
   return (
     <>
       <h2 className="section-title">Administrar Productos</h2>
-
+      <AdminNav />
       <section className="admin-form">
         <h3>{editando ? `Modificar producto ${codigoEditando}` : 'Nuevo producto'}</h3>
 
